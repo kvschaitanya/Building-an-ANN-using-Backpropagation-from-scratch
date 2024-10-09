@@ -1,10 +1,10 @@
 import numpy
 
 def tanh(x):
-    return (numpy.exp(x) - numpy.exp(-x)) / (numpy.exp(x) + numpy.exp(-x))
+    return numpy.tanh(x)
 
 def d_tanh(x):
-    return 1 - tanh(x) ** 2
+    return 1 - numpy.tanh(x) ** 2
 
 def sigmoid(x):
 	return 1 / (1 + numpy.exp(-x))

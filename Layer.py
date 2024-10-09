@@ -1,9 +1,10 @@
 import numpy
 
 class DenseLayer:
-	def __init__(self, input_size, output_size):
+	def __init__(self, input_size, output_size, l2_lambda = 0.):
 		self.weights = numpy.random.random((input_size, output_size)) - 0.5
 		self.bias = numpy.random.random((1, output_size)) - 0.5
+		self.l2_lambda = l2_lambda
 
 	def forward_propagation(self, input):
 		self.input = input
@@ -11,7 +12,7 @@ class DenseLayer:
 		return self.output
 
 	def backward_propagation(self, output_error, learning_rate):
-		dy_dw = self.input.T @ output_error
+		dy_dw = self.input.T @ output_error + self.l2_lambda * self.weights
 		dy_dx = output_error @ self.weights.T
 		self.weights -= learning_rate * dy_dw
 		self.bias -= learning_rate * output_error.sum(axis = 0)
