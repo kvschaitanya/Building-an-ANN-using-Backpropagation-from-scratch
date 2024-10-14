@@ -5,10 +5,11 @@ class Network:
 		self.d_error = None
 	def add(self, layer):
 		self.layers.append(layer)
-	def compile(self, error, d_error):
+	def compile(self, error, d_error, optimizer):
 		self.error = error
 		self.d_error = d_error
-	def fit(self, X, y, epochs, learning_rate = 0.01):
+		self.optimizer = optimizer
+	def fit(self, X, y, epochs):
 		loss_history = []
 		for _ in range(epochs):
 			output = X.copy()
@@ -18,7 +19,7 @@ class Network:
 			output_error = self.d_error(output, y)
 				  
 			for i in range(len(self.layers) - 1, -1, -1):
-				output_error = self.layers[i].backward_propagation(output_error, learning_rate)
+				output_error = self.layers[i].backward_propagation(output_error, self.optimizer)
 				
 			loss_history.append(self.error(output, y))
 		return loss_history

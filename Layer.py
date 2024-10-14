@@ -11,11 +11,10 @@ class DenseLayer:
 		self.output = input @ self.weights + self.bias
 		return self.output
 
-	def backward_propagation(self, output_error, learning_rate):
+	def backward_propagation(self, output_error, optimizer):
 		dy_dw = self.input.T @ output_error + self.l2_lambda * self.weights
 		dy_dx = output_error @ self.weights.T
-		self.weights -= learning_rate * dy_dw
-		self.bias -= learning_rate * output_error.sum(axis = 0)
+		optimizer.update(self, dy_dw, output_error.sum(axis = 0))
 		return dy_dx
 	
 class ActivationLayer:
@@ -25,5 +24,5 @@ class ActivationLayer:
 	def forward_propagation(self, input):
 		self.input = input
 		return self.activation(input)
-	def backward_propagation(self, output_error, learning_rate):
+	def backward_propagation(self, output_error, optimizer):
 		return output_error * self.activation_d(self.input)
