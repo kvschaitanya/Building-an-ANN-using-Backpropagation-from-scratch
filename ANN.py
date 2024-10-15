@@ -11,7 +11,8 @@ class Network:
 		self.optimizer = optimizer
 	def fit(self, X, y, epochs):
 		loss_history = []
-		for _ in range(epochs):
+		interval = epochs / 10
+		for epoch in range(epochs):
 			output = X.copy()
 			for i in range(len(self.layers)):
 				output = self.layers[i].forward_propagation(output)
@@ -22,6 +23,9 @@ class Network:
 				output_error = self.layers[i].backward_propagation(output_error, self.optimizer)
 				
 			loss_history.append(self.error(output, y))
+			if (epoch + 1) % interval == 0:
+				print(f"epoch {epoch + 1}/{epochs}\t\terror = {self.error(output, y)}")
+
 		return loss_history
 				
 	def predict(self, x):
